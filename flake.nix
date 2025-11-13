@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    bird.url = "github:NuschtOS/bird.nix";
   };
   outputs =
     { ... }@inputs:
