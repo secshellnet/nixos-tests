@@ -8,10 +8,6 @@ on:
   schedule:
     - cron: "27 2 */3 * *" # run every three days at 2:27 am
 
-concurrency:
-  group: ci
-  cancel-in-progress: true
-
 permissions:
   contents: read
   id-token: write
