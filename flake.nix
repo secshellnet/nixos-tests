@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     bird.url = "github:NuschtOS/bird.nix";
+    ifstate.url = "git+https://codeberg.org/liske/ifstate";
   };
   outputs =
     { ... }@inputs:
