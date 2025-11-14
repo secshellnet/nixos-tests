@@ -40,6 +40,8 @@ jobs:
   show:
     name: nix flake show
     runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -50,22 +52,16 @@ jobs:
       - name: Show flake structure
         run: nix flake show 2> /dev/null
 
-  eval:
+      - name: Generate test matrix
+        id: generate-matrix
+        run: |
+          matrix=$(nix flake show --json | jq -r '.checks["x86_64-linux"] | keys | tojson')
+          echo "matrix=${matrix}" >> $GITHUB_OUTPUT
+
+  check:
     name: nix flake check
     runs-on: ubuntu-24.04
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
-        with:
-          root-reserve-mb: 2048
-          temp-reserve-mb: 1024
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
-
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
@@ -73,4 +69,38 @@ jobs:
         uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31.8.3
 
       - name: Check flake
-        run: nix -L flake check
+        run: nix -L flake check --no-build
+
+  test:
+    name: "nix build .#${{ matrix.name }}"
+    needs: [ show, check ]
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        name: ${{ fromJson(needs.show.outputs.matrix) }}
+    steps:
+      - name: Maximize build space
+        #uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c # v10
+        #with:
+        #  root-reserve-mb: 61440 # 60 gb for nix store
+        #  temp-reserve-mb: 512
+        #  remove-dotnet: 'true'
+        #  remove-android: 'true'
+        #  remove-haskell: 'true'
+        #  remove-codeql: 'true'
+        #  remove-docker-images: 'true'
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@7ec16f2c061ab07b235a7245e06ed46fe9a1cab6 # v31.8.3
+
+      - name: Run integration test
+        run: nix -L build .#checks.x86_64-linux.${{ matrix.name }}
