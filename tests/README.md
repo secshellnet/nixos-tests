@@ -3,7 +3,7 @@
 | Test Name                                 | Tested Software Components |
 |-------------------------------------------|----------------------------|
 | bgp-extended-nexthop                      | FRR, BIRD3                 |
-| bgp-prefsource                            | FRR, BIRD2                 |
+| bgp-prefsource                            | FRR, BIRD3                 |
 | bgp-simple                                | FRR, BIRD3                 |
 | bird-bgp-tcpao                            | BIRD3                      | <!-- Add FRR as a if TCP-AO is supported -->
 | dhcpv4                                    | Kea DHCP Server, dhclient  | <!-- Extend by NetworkManager/systemd-networkd clients -->
