@@ -3,6 +3,7 @@
 | Test Name                                 | Tested Software Components |
 |-------------------------------------------|----------------------------|
 | bgp-extended-nexthop                      | FRR, BIRD3                 |
+| bgp-frr-unnumbered                        | FRR                        | <!-- Add BIRD when unnumbered peerings are supported -->
 | bgp-md5                                   | FRR, BIRD3                 |
 | bgp-prefsource                            | FRR, BIRD3                 |
 | bgp-simple                                | FRR, BIRD3                 |
