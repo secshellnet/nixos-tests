@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "bgp-prefsource";
 
@@ -93,7 +93,6 @@
       };
       services.bird = {
         enable = true;
-        package = pkgs.bird2;
         config = ''
           log syslog all;
           router id 198.51.100.1;
