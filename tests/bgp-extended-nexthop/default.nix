@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "bgp-extended-nexthop";
 
@@ -45,7 +45,6 @@
       ];
       services.bird = {
         enable = true;
-        package = pkgs.bird2;
         config = ''
           log syslog all;
           router id 192.0.2.2;

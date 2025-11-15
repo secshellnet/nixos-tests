@@ -2,7 +2,7 @@
 
 | Test Name                                 | Tested Software Components |
 |-------------------------------------------|----------------------------|
-| bgp-extended-nexthop                      | FRR, BIRD2                 |
+| bgp-extended-nexthop                      | FRR, BIRD3                 |
 | bgp-prefsource                            | FRR, BIRD2                 |
 | bgp-simple                                | FRR, BIRD3                 |
 | bird-bgp-tcpao                            | BIRD3                      | <!-- Add FRR as a if TCP-AO is supported -->
