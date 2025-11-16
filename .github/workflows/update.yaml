@@ -1,0 +1,47 @@
+name: Update Flake
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "43 3 */10 * *" # run every ten days at 3:43 am
+
+env:
+  BRANCH: auto/update-flake
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    name: "nix flake update"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
+
+      - name: nix flake update
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          if git ls-remote --exit-code --heads origin ${BRANCH}; then
+            git fetch origin ${BRANCH}:${BRANCH}
+            git checkout ${BRANCH}
+            git reset --hard origin/main
+          else
+            git checkout -b ${BRANCH}
+          fi
+
+          nix flake update --commit-lock-file
+
+          git push --force origin ${BRANCH}
+
+      - name: "Create pull request"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --base main --head ${BRANCH} --title "Update Flake" --body "" || true
