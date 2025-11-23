@@ -1,7 +1,15 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    bird.url = "github:NuschtOS/bird.nix";
+    bird = {
+      url = "github:NuschtOS/bird.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    gobgp = {
+      url = "github:wavelens/gobgp.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     { ... }@inputs:
