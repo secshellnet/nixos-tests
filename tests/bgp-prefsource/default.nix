@@ -36,12 +36,12 @@
           ip route 192.0.2.0/24 reject
           ipv6 route 2001:db8::/64 reject
 
-          router bgp 65001
+          router bgp 64496
             no bgp ebgp-requires-policy
             no bgp default ipv4-unicast
             bgp router-id 192.0.2.1
 
-            neighbor fe80::2 remote-as 65002
+            neighbor fe80::2 remote-as 64497
             neighbor fe80::2 capability extended-nexthop
             neighbor fe80::2 interface eth1
 
@@ -134,8 +134,8 @@
           }
 
           protocol bgp a {
-            local as 65002;
-            neighbor fe80::1 as 65001;
+            local as 64497;
+            neighbor fe80::1 as 64496;
             interface "eth1";
 
             ipv4 {

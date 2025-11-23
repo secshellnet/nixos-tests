@@ -13,7 +13,7 @@
   nodes = {
     a = {
       services.frr.config = ''
-        router bgp 65001
+        router bgp 64496
           no bgp ebgp-requires-policy
           no bgp default ipv4-unicast
           bgp router-id 192.0.2.10
@@ -34,7 +34,7 @@
     };
     b = {
       services.frr.config = ''
-        router bgp 65002
+        router bgp 64497
           no bgp ebgp-requires-policy
           no bgp default ipv4-unicast
           bgp router-id 192.0.2.11

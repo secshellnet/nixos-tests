@@ -25,14 +25,14 @@
       services.frr = {
         bgpd.enable = true;
         config = ''
-          router bgp 65001
+          router bgp 64496
             no bgp ebgp-requires-policy
             no bgp default ipv4-unicast
             bgp router-id 192.0.2.1
 
-            neighbor 192.0.2.2 remote-as 65002
+            neighbor 192.0.2.2 remote-as 64497
             neighbor 192.0.2.2 ttl-security hops 1
-            neighbor 2001:db8::2 remote-as 65002
+            neighbor 2001:db8::2 remote-as 64497
             neighbor 2001:db8::2 ttl-security hops 1
 
             address-family ipv4 unicast
@@ -99,8 +99,8 @@
           }
 
           protocol bgp a_v4 {
-            local as 65002;
-            neighbor 192.0.2.1 as 65001;
+            local as 64497;
+            neighbor 192.0.2.1 as 64496;
 
             ttl security 1;
 
@@ -111,8 +111,8 @@
           }
 
           protocol bgp a_v6 {
-            local as 65002;
-            neighbor 2001:db8::1 as 65001;
+            local as 64497;
+            neighbor 2001:db8::1 as 64496;
 
             ttl security 1;
 
