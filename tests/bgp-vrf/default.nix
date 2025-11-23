@@ -68,14 +68,14 @@
             ipv6 route 2001:db8:beef::/48 unreachable
           exit-vrf
 
-          router bgp 65001 vrf vrf0
+          router bgp 64496 vrf vrf0
             no bgp ebgp-requires-policy
             no bgp default ipv4-unicast
             no bgp network import-check
             bgp router-id 192.0.2.1
 
-            neighbor 192.0.2.2 remote-as 65002
-            neighbor 2001:db8::2 remote-as 65002
+            neighbor 192.0.2.2 remote-as 64497
+            neighbor 2001:db8::2 remote-as 64497
 
             address-family ipv4 unicast
               network 198.51.100.0/24
@@ -175,8 +175,8 @@
           }
 
           protocol bgp a4 {
-            local as 65002;
-            neighbor 192.0.2.1 as 65001;
+            local as 64497;
+            neighbor 192.0.2.1 as 64496;
 
             vrf "vrf0";
 
@@ -187,8 +187,8 @@
           }
 
           protocol bgp a6 {
-            local as 65002;
-            neighbor 2001:db8::1 as 65001;
+            local as 64497;
+            neighbor 2001:db8::1 as 64496;
 
             vrf "vrf0";
 

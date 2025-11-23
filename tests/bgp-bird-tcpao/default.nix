@@ -69,8 +69,8 @@
           }
 
           protocol bgp b4 {
-            local as 65001;
-            neighbor 192.0.2.2 as 65002;
+            local as 64496;
+            neighbor 192.0.2.2 as 64497;
 
             authentication ao;
             keys {
@@ -89,8 +89,8 @@
           }
 
           protocol bgp b6 {
-            local as 65001;
-            neighbor 2001:db8::2 as 65002;
+            local as 64496;
+            neighbor 2001:db8::2 as 64497;
 
             authentication ao;
             keys {
@@ -134,7 +134,7 @@
         '';
         routerId = "192.0.2.2";
         templates.bgp.a = ''
-          local as 65002;
+          local as 64497;
           authentication ao;
         '';
         protocols = {
@@ -163,7 +163,7 @@
           };
           bgp = {
             "a4 from a" = ''
-              neighbor 192.0.2.1 as 65001;
+              neighbor 192.0.2.1 as 64496;
 
               keys {
                 key {
@@ -180,7 +180,7 @@
               };
             '';
             "a6 from a" = ''
-              neighbor 2001:db8::1 as 65001;
+              neighbor 2001:db8::1 as 64496;
 
               keys {
                 key {
