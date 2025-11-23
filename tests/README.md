@@ -7,7 +7,7 @@
 | bgp-frr-unnumbered                        | FRR                        | <!-- Add BIRD when unnumbered peerings are supported -->
 | bgp-md5                                   | FRR, BIRD3                 |
 | bgp-prefsource                            | FRR, BIRD3                 |
-| bgp-simple                                | FRR, BIRD3                 |
+| bgp-simple                                | FRR, BIRD3, GoBGP          |
 | bgp-ttl-security                          | FRR, BIRD3                 |
 | dhcpv4                                    | Kea DHCP Server, dhclient  | <!-- Extend by NetworkManager/systemd-networkd clients -->
 | dns-knot                                  | Knot DNS Server            |
