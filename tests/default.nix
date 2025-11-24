@@ -29,6 +29,15 @@ builtins.listToAttrs (
         };
         driver = pkgs.testers.runNixOSTest (
           lib.recursiveUpdate {
+            defaults = {
+              imports = [
+                (nixpkgs + "/nixos/modules/profiles/minimal.nix")
+                (nixpkgs + "/nixos/modules/profiles/perlless.nix")
+              ];
+              nix.enable = lib.mkDefault false;
+              services.lvm.enable = lib.mkDefault false;
+              security.sudo.enable = lib.mkDefault false;
+            };
             interactive = {
               sshBackdoor.enable = true;
               nodes = lib.listToAttrs (
