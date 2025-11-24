@@ -1,6 +1,7 @@
 {
   inputs,
   system,
+  interactive ? false,
 }:
 let
   inherit (inputs) nixpkgs;
@@ -26,19 +27,26 @@ builtins.listToAttrs (
             pkgs
             ;
         };
+        driver = pkgs.testers.runNixOSTest (
+          lib.recursiveUpdate {
+            interactive = {
+              sshBackdoor.enable = true;
+              nodes = lib.listToAttrs (
+                map (name: {
+                  inherit name;
+                  value.virtualisation.graphics = false;
+                }) (builtins.attrNames test.nodes)
+              );
+            };
+          } test
+        );
       in
-      pkgs.testers.runNixOSTest (
-        lib.recursiveUpdate {
-          interactive = {
-            sshBackdoor.enable = true;
-            nodes = lib.listToAttrs (
-              map (name: {
-                inherit name;
-                value.virtualisation.graphics = false;
-              }) (builtins.attrNames test.nodes)
-            );
-          };
-        } test
-      );
+      if interactive then
+        {
+          type = "app";
+          program = "${driver.driverInteractive}/bin/nixos-test-driver";
+        }
+      else
+        driver;
   }) tests
 )
