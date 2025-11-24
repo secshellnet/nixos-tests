@@ -19,5 +19,12 @@
     {
       formatter = eachDefaultSystem (system: inputs.nixpkgs.legacyPackages.${system}.nixfmt-tree);
       checks = eachDefaultSystem (system: import ./tests { inherit inputs system; });
+      apps = eachDefaultSystem (
+        system:
+        import ./tests {
+          inherit inputs system;
+          interactive = true;
+        }
+      );
     };
 }
