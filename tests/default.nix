@@ -54,6 +54,7 @@ builtins.listToAttrs (
         {
           type = "app";
           program = "${driver.driverInteractive}/bin/nixos-test-driver";
+          meta.description = test.name;
         }
       else
         driver;
