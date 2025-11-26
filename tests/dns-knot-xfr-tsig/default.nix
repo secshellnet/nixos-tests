@@ -50,7 +50,7 @@
               address = [
                 "192.0.2.11"
               ];
-              key = "xfr_key";
+              key = "xfr_key"; # for notify
             }
           ];
 
@@ -100,30 +100,19 @@
         settings = {
           server.automatic-acl = "on";
 
-          key = [
-            {
-              id = "xfr_key";
-              algorithm = "hmac-sha256";
-              secret = "eGZyLWludmFsaWQK";
-            }
-          ];
+          key.xfr_key = {
+            algorithm = "hmac-sha256";
+            secret = "eGZyLWludmFsaWQK";
+          };
 
-          remote = [
-            {
-              id = "primary";
-              address = [
-                "192.0.2.10"
-              ];
-              key = "xfr_key";
-            }
-          ];
+          remote.primary = {
+            address = [ "192.0.2.10" ];
+            key = "xfr_key";
+          };
 
-          zone = [
-            {
-              domain = "example.com";
-              master = "primary";
-            }
-          ];
+          zone."example.com" = {
+            master = "primary";
+          };
         };
       };
     };

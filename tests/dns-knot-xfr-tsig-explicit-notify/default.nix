@@ -34,58 +34,48 @@
       };
       services.knot = {
         settings = {
-          key = [
-            {
-              id = "notify_key";
+          key = {
+            notify_key = {
               algorithm = "hmac-sha256";
               secret = "bm90aWZ5LWludmFsaWQK";
-            }
-            {
-              id = "xfr_key";
+            };
+            xfr_key = {
               algorithm = "hmac-sha256";
               secret = "eGZyLWludmFsaWQK";
-            }
-          ];
+            };
+          };
 
-          remote = [
-            {
-              id = "secondary";
-              address = [
-                "192.0.2.11"
-              ];
-              key = "xfr_key";
-            }
-          ];
+          remote.secondary = {
+            address = [
+              "192.0.2.11"
+            ];
+            key = "notify_key";
+          };
 
-          acl = [
-            {
-              id = "xfr_to_secondary";
+          acl = {
+            xfr_from_secondary = {
               key = "xfr_key";
               action = "transfer";
-            }
-            {
-              id = "notify_to_secondary";
+            };
+            notify_secondary = {
               key = "notify_key";
               action = "notify";
-            }
-          ];
+            };
+          };
 
-          zone = [
-            {
-              domain = "example.com";
-              notify = "secondary";
-              acl = [
-                "xfr_to_secondary"
-                "notify_to_secondary"
-              ];
-              file = pkgs.writeText "example.com" ''
-                example.com.      IN  SOA  a.example.com hostmaster.example.com. (2025031200 86400 600 864000 60)
-                example.com.      IN  NS   a.example.com.
-                example.com.      IN  NS   b.example.com.
-                example.com.      IN  A    198.51.100.10
-              '';
-            }
-          ];
+          zone."example.com" = {
+            notify = "secondary";
+            acl = [
+              "xfr_from_secondary"
+              "notify_secondary"
+            ];
+            file = pkgs.writeText "example.com" ''
+              example.com.      IN  SOA  a.example.com hostmaster.example.com. (2025031200 86400 600 864000 60)
+              example.com.      IN  NS   a.example.com.
+              example.com.      IN  NS   b.example.com.
+              example.com.      IN  A    198.51.100.10
+            '';
+          };
         };
       };
     };
