@@ -53,11 +53,11 @@
           };
 
           acl = {
-            xfr_to_secondary = {
+            xfr_from_secondary = {
               key = "xfr_key";
               action = "transfer";
             };
-            notify_to_secondary = {
+            notify_secondary = {
               key = "notify_key";
               action = "notify";
             };
@@ -66,8 +66,8 @@
           zone."example.com" = {
             notify = "secondary";
             acl = [
-              "xfr_to_secondary"
-              "notify_to_secondary"
+              "xfr_from_secondary"
+              "notify_secondary"
             ];
             file = pkgs.writeText "example.com" ''
               example.com.      IN  SOA  a.example.com hostmaster.example.com. (2025031200 86400 600 864000 60)
