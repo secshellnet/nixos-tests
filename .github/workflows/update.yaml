@@ -27,8 +27,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name 'secshellde'
+          git config user.email '144960330+secshellde@users.noreply.github.com.'
 
           if git ls-remote --exit-code --heads origin ${BRANCH}; then
             git fetch origin ${BRANCH}:${BRANCH}
