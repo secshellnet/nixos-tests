@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  inputs,
   ...
 }:
 {
@@ -16,8 +15,6 @@
 
   nodes = {
     a = {
-      imports = [ "${inputs.ifstate}/module.nix" ];
-      environment.systemPackages = [ inputs.ifstate.packages.${pkgs.system}.default ];
       networking = {
         iproute2 = {
           enable = true;
@@ -27,7 +24,6 @@
         };
         ifstate = {
           enable = true;
-          package = inputs.ifstate.packages.${pkgs.system}.default;
           settings = {
             parameters.ignore.ifname = [
               "eth0"
