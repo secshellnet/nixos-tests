@@ -81,13 +81,100 @@ jobs:
       - name: Check flake
         run: nix -L flake check --no-build
 
+  detect-changes:
+    name: Detect changed tests with nix-diff
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    steps:
+      - uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
+      - uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
+        with:
+          use-flakehub: false
+
+      - name: Set revision variables
+        id: set-revs
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "REV1=${{ github.base_ref }}" >> "$GITHUB_ENV"
+            echo "REV2=${{ github.head_ref }}" >> "$GITHUB_ENV"
+            echo "PR detected. Comparing base branch '${{ github.base_ref }}' with head '${{ github.head_ref }}'."
+          else
+            echo "REV1=${{ github.event.before }}" >> "$GITHUB_ENV"
+            echo "REV2=${{ github.sha }}" >> "$GITHUB_ENV"
+            echo "Push detected. Comparing from $REV1 to $REV2."
+          fi
+
+      - name: Checkout Base Revision (REV1)
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          ref: ${{ env.REV1 }}
+          path: repo-rev1
+          fetch-depth: 0
+
+      - name: Checkout Head Revision (REV2)
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        with:
+          ref: ${{ env.REV2 }}
+          path: repo-rev2
+          fetch-depth: 0
+
+      - name: Generate matrix for changed tests
+        id: generate-matrix
+        run: |
+          set -euo pipefail
+
+          echo "Comparing checks between directories 'repo-rev1' and 'repo-rev2'..."
+
+          ALL_CHECKS=$(nix flake show --quiet --json ./repo-rev2# \
+            2>/dev/null \
+            | jq -r '.checks."x86_64-linux" | keys[]')
+
+          if [[ -z "$ALL_CHECKS" ]]; then
+            echo "No checks found in flake at REV2. Exiting."
+            echo "matrix=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          CHANGED_CHECKS=()
+
+          for check in $ALL_CHECKS; do
+            echo " - Checking: ${check}"
+
+            if ! nix flake show --json ./repo-rev1# 2>/dev/null \
+                  | jq -e '.checks."x86_64-linux"."'${check}'"' >/dev/null 2>&1; then
+              echo "   -> New check detected: ${check}"
+              CHANGED_CHECKS+=("${check}")
+            else
+              path_old=$(nix eval --raw --quiet ./repo-rev1#checks.x86_64-linux.\"${check}\".config.driver)
+              path_new=$(nix eval --raw --quiet ./repo-rev2#checks.x86_64-linux.\"${check}\".config.driver)
+
+              if ! diff_output=$(nix run nixpkgs#nix-diff -- "$path_old" "$path_new" 2>&1); then
+                echo "   -> Change detected for ${check}:"
+                echo "${diff_output}" | sed 's/^/     /'
+                echo "-----------------------------------------------------"
+                CHANGED_CHECKS+=("${check}")
+              fi
+            fi
+          done
+
+          if [ "${#CHANGED_CHECKS[@]}" -eq 0 ]; then
+            FINAL_MATRIX='[]'
+          else
+            FINAL_MATRIX=$(printf '%s\n' "${CHANGED_CHECKS[@]}" | jq -Rcn '[inputs]')
+          fi
+
+          echo "Final matrix for build/deploy jobs:"
+          echo "$FINAL_MATRIX"
+          echo "matrix=$FINAL_MATRIX" >> "$GITHUB_OUTPUT"
+
   test:
     name: "nix build .#${{ matrix.name }}"
-    needs: [ show, check ]
+    needs: [ show, check, detect-changes ]
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        name: ${{ fromJson(needs.show.outputs.matrix) }}
+        name: ${{ github.event_name == 'pull_request' && fromJson(needs.detect-changes.outputs.matrix) || fromJson(needs.show.outputs.matrix) }}
     steps:
       - name: Maximize build space
         run: |
