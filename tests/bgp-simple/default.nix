@@ -156,35 +156,19 @@
     };
     c = {
       imports = [ inputs.gobgp.nixosModules.gobgp ];
-      networking.interfaces = {
-        eth1 = {
-          ipv4.addresses = [
-            {
-              address = "192.0.2.3";
-              prefixLength = 29;
-            }
-          ];
-          ipv6.addresses = [
-            {
-              address = "2001:db8::3";
-              prefixLength = 64;
-            }
-          ];
-        };
-        lo = {
-          ipv4.routes = [
-            {
-              address = "203.0.113.0";
-              prefixLength = 24;
-            }
-          ];
-          ipv6.routes = [
-            {
-              address = "2001:db8:dead::";
-              prefixLength = 48;
-            }
-          ];
-        };
+      networking.interfaces.eth1 = {
+        ipv4.addresses = [
+          {
+            address = "192.0.2.3";
+            prefixLength = 29;
+          }
+        ];
+        ipv6.addresses = [
+          {
+            address = "2001:db8::3";
+            prefixLength = 64;
+          }
+        ];
       };
       services.gobgpd = {
         enable = true;
@@ -206,6 +190,10 @@
               "directly-connected"
               "static"
             ];
+          };
+          static-paths = {
+            "unreachable-ipv4".prefix = "203.0.113.0/24";
+            "unreachable-ipv6".prefix = "2001:db8:dead::/48";
           };
           neighbors = {
             "a-ipv4" = {
