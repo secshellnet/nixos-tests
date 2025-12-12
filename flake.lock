@@ -84,11 +84,11 @@
         "search": "search"
       },
       "locked": {
-        "lastModified": 1765413700,
-        "narHash": "sha256-INy4w+BPh8qmZqjuPl6I99v5Pmbjj2rGgw1ZAF3CCE4=",
+        "lastModified": 1765502499,
+        "narHash": "sha256-1keygd7+VHlak3rpja3Xq3Sxc+oXFH72ynUzRQz6ps8=",
         "owner": "wavelens",
         "repo": "gobgp.nix",
-        "rev": "a7f5b6a76a6b7a181f94886be32fafd781352bbd",
+        "rev": "f4edf4c4e86c0dcb9ba3a6c5ae487fd7ce11a3f1",
         "type": "github"
       },
       "original": {
