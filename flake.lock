@@ -84,11 +84,11 @@
         "search": "search"
       },
       "locked": {
-        "lastModified": 1765413700,
-        "narHash": "sha256-INy4w+BPh8qmZqjuPl6I99v5Pmbjj2rGgw1ZAF3CCE4=",
+        "lastModified": 1766268180,
+        "narHash": "sha256-yPp3FNEZUgN7GNkV0eCqZSVXRaB5/AhzNZaw+Xz8fgY=",
         "owner": "wavelens",
         "repo": "gobgp.nix",
-        "rev": "a7f5b6a76a6b7a181f94886be32fafd781352bbd",
+        "rev": "cb4fa2222d2da7931d74d0e442b6a0e0fc55aa72",
         "type": "github"
       },
       "original": {
@@ -127,11 +127,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1764522689,
-        "narHash": "sha256-SqUuBFjhl/kpDiVaKLQBoD8TLD+/cTUzzgVFoaHrkqY=",
+        "lastModified": 1766201043,
+        "narHash": "sha256-eplAP+rorKKd0gNjV3rA6+0WMzb1X1i16F5m5pASnjA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8bb5646e0bed5dbd3ab08c7a7cc15b75ab4e1d0f",
+        "rev": "b3aad468604d3e488d627c0b43984eb60e75e782",
         "type": "github"
       },
       "original": {
