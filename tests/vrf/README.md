@@ -93,6 +93,8 @@ Each VRF has:
 ## TODO
 - NAT for Tenant1 is being applied after VRF public (on eth2), this results in wrong dest address for reply. Is it possible to move NAT between VRF tenant1/public?
 - ds1r has ra default ipv6 routes, besides bird??? -> remove these!
+- Think about how to add default route in vrf tenant1, currently via main
+  > staticd[697]: [PNYPZ-BCP8Y] Static Route using public interface not installed because the interface does not exist in specified vrf
 
 ### Extend (beyond first idea)
 - test default originate from upstream provider when route leaking is setup within frr (linux ip rule doesn't support this)

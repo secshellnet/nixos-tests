@@ -38,16 +38,6 @@ in
           };
         };
       };
-      routing.routes = [
-        {
-          to = "0.0.0.0/0";
-          dev = "public";
-        }
-        {
-          to = "::/0";
-          dev = "public";
-        }
-      ];
     };
 
     nftables.tables.nat.content = ''
