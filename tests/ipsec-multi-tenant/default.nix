@@ -4,321 +4,112 @@
 
   defaults = {
     networking.firewall.enable = false;
-    virtualisation.interfaces = {
-      outside = {
-        vlan = 2;
-        assignIP = false;
-      };
-      trunk = {
-        vlan = 20;
-        assignIP = false;
-      };
-    };
   };
 
-  nodes = {
-    /*
-      machine1 = {
-        networking.ifstate = {
-          enable = true;
-          settings = {
-            interfaces = {
-              # external interface for IPsec termination
-              outside = {
-                addresses = [ "198.51.100.1/30" ];
-                link = {
-                  state = "up";
-                  kind = "physical";
-                };
-              };
-
-              # inside base interface
-              trunk = {
-                link = {
-                  kind = "physical";
-                  state = "up";
-                };
-              };
-
-              # first tenant VRF
-              vrf-tenant1 = {
-                link = {
-                  state = "up";
-                  kind = "vrf";
-                  vrf_table = 101;
-                };
-              };
-              ipsec-tenant1 = {
-                link = {
-                  state = "up";
-                  kind = "xfrm";
-                  xfrm_link = "outside";
-                  xfrm_if_id = 1;
-                  master = "vrf-tenant1";
-                };
-              };
-              inside-tenant1 = {
-                addresses = [ "192.0.2.1/24" ];
-                link = {
-                  state = "up";
-                  kind = "vlan";
-                  link = "trunk";
-                  vlan_id = 41;
-                  master = "vrf-tenant1";
-                };
-              };
-
-              # second tenant VRF
-              vrf-tenant2 = {
-                link = {
-                  state = "up";
-                  kind = "vrf";
-                  vrf_table = 102;
-                };
-              };
-              ipsec-tenant2 = {
-                link = {
-                  state = "up";
-                  kind = "xfrm";
-                  xfrm_link = "outside";
-                  xfrm_if_id = 2;
-                  master = "vrf-tenant2";
-                };
-              };
-              inside-tenant2 = {
-                addresses = [ "192.0.2.1/24" ];
-                link = {
-                  state = "up";
-                  kind = "vlan";
-                  link = "trunk";
-                  vlan_id = 42;
-                  master = "vrf-tenant2";
-                };
-              };
-            };
-            routing = {
-              routes = [
-                # first tenant VRF: add default route into vpn
-                {
-                  to = "0.0.0.0/0";
-                  dev = "ipsec-tenant1";
-                  table = 101;
-                }
-
-                # second tenant VRF: add default route into vpn
-                {
-                  to = "0.0.0.0/0";
-                  dev = "ipsec-tenant2";
-                  table = 102;
-                }
-              ];
-            };
-          };
-        };
-
-        services.strongswan-swanctl = {
-          enable = true;
-          swanctl = {
-            secrets.ike.default.secret = "012345678ABCDEF";
-            connections = {
-              tenant1 = {
-                local_addrs = [ "198.51.100.1" ];
-                remote_addrs = [ "198.51.100.2" ];
-
-                if_id_in = "1";
-                if_id_out = "1";
-
-                local."machine2".auth = "psk";
-                remote."machine1".auth = "psk";
-
-                children.tenant1 = {
-                  local_ts = [ "192.0.2.0/24" ];
-                  remote_ts = [ "0.0.0.0/0" ];
-                };
-              };
-              tenant2 = {
-                local_addrs = [ "198.51.100.1" ];
-                remote_addrs = [ "198.51.100.2" ];
-
-                if_id_in = "2";
-                if_id_out = "2";
-
-                local."machine2".auth = "psk";
-                remote."machine1".auth = "psk";
-
-                children.tenant1 = {
-                  local_ts = [ "192.0.2.0/24" ];
-                  remote_ts = [ "0.0.0.0/0" ];
-                };
-              };
-            };
-          };
-        };
-      };
-    */
-    machine2 = {
-      networking.ifstate = {
-        enable = true;
-        settings = {
-          interfaces = {
-            # external interface for IPsec termination
-            outside = {
-              addresses = [ "198.51.100.2/30" ];
-              link = {
-                state = "up";
-                kind = "physical";
-              };
-            };
-
-            # inside base interface
-            trunk = {
-              link = {
-                kind = "physical";
-                state = "up";
-              };
-            };
-
-            # first tenant VRF
-            vrf-tenant1 = {
-              link = {
-                state = "up";
-                kind = "vrf";
-                vrf_table = 101;
-              };
-            };
-            ipsec-tenant1 = {
-              link = {
-                state = "up";
-                kind = "xfrm";
-                xfrm_link = "outside";
-                xfrm_if_id = 1;
-                master = "vrf-tenant1";
-              };
-            };
-            inside-tenant1 = {
-              addresses = [ "192.0.2.1/24" ];
-              link = {
-                state = "up";
-                kind = "vlan";
-                link = "trunk";
-                vlan_id = 41;
-                master = "vrf-tenant1";
-              };
-            };
-
-            # second tenant VRF
-            vrf-tenant2 = {
-              link = {
-                state = "up";
-                kind = "vrf";
-                vrf_table = 102;
-              };
-            };
-            ipsec-tenant2 = {
-              link = {
-                state = "up";
-                kind = "xfrm";
-                xfrm_link = "outside";
-                xfrm_if_id = 2;
-                master = "vrf-tenant2";
-              };
-            };
-            inside-tenant2 = {
-              addresses = [ "192.0.2.1/24" ];
-              link = {
-                state = "up";
-                kind = "vlan";
-                link = "trunk";
-                vlan_id = 42;
-                master = "vrf-tenant2";
-              };
-            };
-          };
-          routing = {
-            routes = [
-              # first tenant VRF: add default route into vpn
-              {
-                to = "0.0.0.0/0";
-                dev = "ipsec-tenant1";
-                table = 101;
-              }
-
-              # second tenant VRF: add default route into vpn
-              {
-                to = "0.0.0.0/0";
-                dev = "ipsec-tenant2";
-                table = 102;
-              }
-            ];
-          };
-        };
-      };
-      /*
-        services.strongswan-swanctl = {
-          enable = true;
-          swanctl = {
-            secrets.ike.default.secret = "012345678ABCDEF";
-            connections = {
-              tenant1 = {
-                local_addrs = [ "198.51.100.2" ];
-                remote_addrs = [ "198.51.100.1" ];
-
-                if_id_in = "1";
-                if_id_out = "1";
-
-                local."machine2".auth = "psk";
-                remote."machine1".auth = "psk";
-
-                children.tenant1 = {
-                  local_ts = [ "192.0.2.0/24" ];
-                  remote_ts = [ "0.0.0.0/0" ];
-                };
-              };
-              tenant2 = {
-                local_addrs = [ "198.51.100.2" ];
-                remote_addrs = [ "198.51.100.1" ];
-
-                if_id_in = "2";
-                if_id_out = "2";
-
-                local."machine2".auth = "psk";
-                remote."machine1".auth = "psk";
-
-                children.tenant1 = {
-                  local_ts = [ "192.0.2.0/24" ];
-                  remote_ts = [ "0.0.0.0/0" ];
-                };
-              };
-            };
-          };
-        };
-      */
-    };
-  };
-
-  testScript =
+  nodes =
     let
-      nc = lib.getExe pkgs.netcat-openbsd;
+      mkRouter = import ./mkRouter.nix;
     in
-    ''
-      start_all()
+    {
+      router1 = mkRouter { };
+      router2 = mkRouter {
+        outsideIp = "198.51.100.2";
+        outsidePeer = "198.51.100.1";
 
-      for m in [machine1, machine2]:
-        m.wait_for_unit("network.target")
+        tenant1Vid = 5;
+        tenant1Ip = "192.0.2.1/24";
+        tenant1Net = "192.0.2.0/24";
 
-      machine1.wait_for_unit("strongswan.service")
-      machine2.wait_for_unit("strongswan-swanctl.service")
+        tenant2Vid = 6;
+        tenant2Ip = "203.0.113.1/24";
+        tenant2Net = "203.0.113.0/24";
+      };
+      t1client = import ./mkNode.nix {
+        vlan = 3;
+        ipv4 = "192.168.0.2";
+        ipv4gw = "192.168.0.1";
+      };
+      t2client = import ./mkNode.nix {
+        vlan = 4;
+        ipv4 = "192.168.1.2";
+        ipv4gw = "192.168.1.1";
+      };
+      t1server = import ./mkNode.nix {
+        vlan = 5;
+        ipv4 = "192.0.2.2";
+        ipv4gw = "192.0.2.1";
+      };
+      t2server = import ./mkNode.nix {
+        vlan = 6;
+        ipv4 = "203.0.113.2";
+        ipv4gw = "203.0.113.1";
+      };
+    };
 
-      machine1.succeed("${nc} -lvnp 4444 &> nc.txt &")
-      machine2.succeed("${nc} -w0 machine1 4444 <<< s3cr3t")
+  interactive.nodes = lib.listToAttrs (
+    map
+      (name: {
+        inherit name;
+        value.environment.systemPackages = with pkgs; [
+          netcat-openbsd
+          tcpdump
+          strongswan
+        ];
+      })
+      [
+        "router1"
+        "router2"
+      ]
+  );
 
-      assert "ESTABLISHED" in machine1.succeed("${lib.getExe' pkgs.strongswan "ipsec"} status"), \
-        "ipsec sa not established"
+  testScript = ''
+    start_all()
 
-      assert "IKE_SAs: 1 total" in machine2.succeed("${lib.getExe pkgs.strongswan} --stats"), \
-        "ipsec sa not established"
+    for m in [router1, router2]:
+      m.wait_for_unit("strongswan-swanctl.service")
 
-      assert "s3cr3t" in machine1.succeed("cat nc.txt"), \
-        "netcat log file doesn't contain secret message"
-    '';
+    with subtest("ensure ipsec is active"):
+      router1.succeed("${lib.getExe' pkgs.strongswan "swanctl"} --initiate -c tenant1")
+      router1.succeed("${lib.getExe' pkgs.strongswan "swanctl"} --initiate -c tenant2")
+
+      # ${lib.getExe' pkgs.strongswan "swanctl"} --stats
+      # ip xfrm policy
+      # ip xfrm state
+
+    with subtest("router can reach all connected nodes"):
+      router1.succeed("ping -c 1 198.51.100.2")
+      router2.succeed("ping -c 1 198.51.100.1")
+
+      router1.succeed("ip vrf exec tenant1 ping -c 1 192.168.0.2")
+      router1.succeed("ip vrf exec tenant2 ping -c 1 192.168.1.2")
+
+      router2.succeed("ip vrf exec tenant1 ping -c 1 192.0.2.2")
+      router2.succeed("ip vrf exec tenant2 ping -c 1 203.0.113.2")
+
+    with subtest("router can reach vrf's of other router"):
+      router2.succeed("ip vrf exec tenant1 ping -c 1 192.168.0.1")
+      router2.succeed("ip vrf exec tenant2 ping -c 1 192.168.1.1")
+
+      #router2.fail("ip vrf exec tenant1 ping -c 1 192.168.1.1")
+      #router2.fail("ip vrf exec tenant2 ping -c 1 192.168.0.1")
+
+      router1.succeed("ip vrf exec tenant1 ping -c 1 192.0.2.1")
+      router1.succeed("ip vrf exec tenant2 ping -c 1 203.0.113.1")
+
+      #router1.fail("ip vrf exec tenant1 ping -c 1 203.0.113.1")
+      #router1.fail("ip vrf exec tenant2 ping -c 1 192.0.2.1")
+
+    # TODO
+    with subtest("t1client can reach ts1server"):
+      t1client.succeed("ping -c 1 192.0.2.2")
+
+    with subtest("t2client can reach ts2server"):
+      t2client.succeed("ping -c 1 203.0.113.2")
+
+    with subtest("t1client can not reach ts2server"):
+      t1client.fail("ping -c 1 203.0.113.2")
+
+    with subtest("t2client can not reach ts1server"):
+      t2client.fail("ping -c 1 192.0.2.2")
+  '';
 }
