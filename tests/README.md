@@ -11,6 +11,7 @@
 | bgp-ttl-security                          | FRR, BIRD3                                                    |
 | dhcpv4                                    | Kea DHCP Server, dhclient                                     | <!-- Extend by NetworkManager/systemd-networkd clients -->
 | dhcpv6                                    | Kea DHCP Server, radvd, dhclient, systemd-networkd, NetworkManager |
+| dhcpv6-pd                                 | Kea DHCP Server, radvd, systemd-networkd                      |
 | dns-knot                                  | Knot DNS Server                                               |
 | dns-knot-dnssec                           | Knot DNS Server                                               |
 | dns-knot-xfr                              | Knot DNS Server                                               |
