@@ -30,6 +30,15 @@
           enable = true;
           settings = {
             interfaces-config.interfaces = [ "eth1" ];
+            hooks-libraries = [
+              {
+                library = "${pkgs.kea}/lib/kea/hooks/libdhcp_run_script.so";
+                parameters = {
+                  name = pkgs.writeShellScript "kea-dhcpv6-pd-add-routes-hook.sh" (builtins.readFile ./hook.sh);
+                  sync = false;
+                };
+              }
+            ];
             subnet6 = [
               {
                 id = 1;
@@ -157,5 +166,7 @@
 
     client.succeed("ip -6 -br a | grep -E 'eth1.*2001:db8:0:1000:'")
     client.succeed("ip -6 route show default dev eth1 | grep default")
+
+    client.succeed("ping -c 1 2001:db8::1")
   '';
 }
