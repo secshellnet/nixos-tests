@@ -63,7 +63,7 @@ jobs:
       - name: Generate test matrix
         id: generate-matrix
         run: |
-          matrix=$(nix flake show --json | jq -r '.checks["x86_64-linux"] | keys | tojson')
+          matrix=$(nix flake show --json | jq -r '.inventory.checks.output.children."x86_64-linux".children | keys | tojson')
           echo "matrix=${matrix}" >> $GITHUB_OUTPUT
 
   check:
