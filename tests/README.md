@@ -5,6 +5,7 @@
 | bgp-bird-tcpao                            | BIRD3                      | <!-- Add FRR when TCP-AO is supported -->
 | bgp-extended-nexthop                      | FRR, BIRD3                 |
 | bgp-frr-unnumbered                        | FRR                        | <!-- Add BIRD when unnumbered peerings are supported -->
+| bgp-frr-vpn-route-leak                    | FRR                        |
 | bgp-md5                                   | FRR, BIRD3                 |
 | bgp-prefsource                            | FRR, BIRD3                 |
 | bgp-simple                                | FRR, BIRD3, GoBGP          |
