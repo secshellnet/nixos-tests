@@ -20,4 +20,7 @@
 | ipsec-transport                           | strongswan                 |
 | nat64-dns64                               | Jool, BIND9                |
 | ospf                                      | FRR, BIRD3                 |
+| ospf-ptp                                  | FRR, BIRD3                 |
+| ospf                                      | FRR, BIRD3                 |
+| ospf-ptp                                  | FRR, BIRD3                 |
 | ping6-local-link                          |                            |
